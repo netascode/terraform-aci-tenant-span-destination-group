@@ -1,3 +1,14 @@
+variable "tenant" {
+  description = "Tenant name."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.tenant))
+    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+  }
+}
+
 variable "name" {
   description = "Tenant SPAN destination group name."
   type        = string
@@ -22,13 +33,11 @@ variable "description" {
 variable "ip" {
   description = "Tenant SPAN destination group IP."
   type        = string
-  default     = ""
 }
 
 variable "source_prefix" {
   description = "Tenant SPAN destination group source prefix."
   type        = string
-  default     = ""
 }
 
 variable "dscp" {
@@ -92,35 +101,33 @@ variable "enforce_version" {
   default     = false
 }
 
-variable "tenant" {
-  description = "Tenant SPAN destination group tenant name."
+variable "destination_tenant" {
+  description = "Tenant SPAN destination group destination tenant name."
   type        = string
   default     = ""
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.tenant))
+    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.destination_tenant))
     error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 }
 
-variable "application_profile" {
-  description = "Tenant SPAN destination group application profile name."
+variable "destination_application_profile" {
+  description = "Tenant SPAN destination group destination application profile name."
   type        = string
-  default     = ""
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.application_profile))
+    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.destination_application_profile))
     error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 }
 
-variable "endpoint_group" {
-  description = "Tenant SPAN destination group endpoint group name."
+variable "destination_endpoint_group" {
+  description = "Tenant SPAN destination group destination endpoint group name."
   type        = string
-  default     = ""
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.endpoint_group))
+    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.destination_endpoint_group))
     error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 }

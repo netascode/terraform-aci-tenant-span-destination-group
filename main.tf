@@ -11,8 +11,7 @@ resource "aci_rest_managed" "spanDest" {
   dn         = "${aci_rest_managed.spanDestGrp.id}/dest-${var.name}"
   class_name = "spanDest"
   content = {
-    name  = var.name
-    descr = ""
+    name = var.name
   }
 }
 
@@ -28,6 +27,6 @@ resource "aci_rest_managed" "spanRsDestEpg" {
     ttl         = var.ttl
     ver         = "ver${var.span_version}"
     verEnforced = var.enforce_version == true ? "yes" : "no"
-    tDn         = "uni/tn-${var.tenant}/ap-${var.application_profile}/epg-${var.endpoint_group}"
+    tDn         = "uni/tn-${coalesce(var.destination_tenant, var.tenant)}/ap-${var.destination_application_profile}/epg-${var.destination_endpoint_group}"
   }
 }

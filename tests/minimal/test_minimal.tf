@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.3.0"
+  required_version = ">= 1.0.0"
 
   required_providers {
     test = {
@@ -13,14 +13,24 @@ terraform {
   }
 }
 
+resource "aci_rest_managed" "fvTenant" {
+  dn         = "uni/tn-TF"
+  class_name = "fvTenant"
+}
+
 module "main" {
   source = "../.."
-  name   = "TEST_GRP_MIN"
-  tenant = "ABC"
+
+  tenant                          = aci_rest_managed.fvTenant.content.name
+  name                            = "TEST_GRP_MIN"
+  destination_application_profile = "AP1"
+  destination_endpoint_group      = "EPG1"
+  ip                              = "1.1.1.1"
+  source_prefix                   = "1.2.3.4/32"
 }
 
 data "aci_rest_managed" "spanDestGrp" {
-  dn         = "uni/tn-ABC/destgrp-TEST_GRP_MIN"
+  dn         = "uni/tn-TF/destgrp-TEST_GRP_MIN"
   depends_on = [module.main]
 }
 
@@ -34,3 +44,28 @@ resource "test_assertions" "spanDestGrp" {
   }
 }
 
+data "aci_rest_managed" "spanRsDestEpg" {
+  dn         = "${data.aci_rest_managed.spanDestGrp.id}/dest-TEST_GRP_MIN/rsdestEpg"
+  depends_on = [module.main]
+}
+
+resource "test_assertions" "spanRsDestEpg" {
+  component = "spanRsDestEpg"
+
+  equal "tDn" {
+    description = "tDn"
+    got         = data.aci_rest_managed.spanRsDestEpg.content.tDn
+    want        = "uni/tn-TF/ap-AP1/epg-EPG1"
+  }
+  equal "ip" {
+    description = "ip"
+    got         = data.aci_rest_managed.spanRsDestEpg.content.ip
+    want        = "1.1.1.1"
+  }
+
+  equal "srcIpPrefix" {
+    description = "srcIpPrefix"
+    got         = data.aci_rest_managed.spanRsDestEpg.content.srcIpPrefix
+    want        = "1.2.3.4/32"
+  }
+}
