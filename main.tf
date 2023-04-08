@@ -8,7 +8,7 @@ resource "aci_rest_managed" "spanDestGrp" {
 }
 
 resource "aci_rest_managed" "spanDest" {
-  dn         = "${aci_rest_managed.spanDestGrp.id}/dest-${var.name}"
+  dn         = "${aci_rest_managed.spanDestGrp.dn}/dest-${var.name}"
   class_name = "spanDest"
   content = {
     name = var.name
@@ -16,7 +16,7 @@ resource "aci_rest_managed" "spanDest" {
 }
 
 resource "aci_rest_managed" "spanRsDestEpg" {
-  dn         = "${aci_rest_managed.spanDest.id}/rsdestEpg"
+  dn         = "${aci_rest_managed.spanDest.dn}/rsdestEpg"
   class_name = "spanRsDestEpg"
   content = {
     dscp        = var.dscp
