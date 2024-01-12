@@ -1,6 +1,8 @@
 <!-- BEGIN_TF_DOCS -->
 [![Tests](https://github.com/netascode/terraform-aci-tenant-span-destination-group/actions/workflows/test.yml/badge.svg)](https://github.com/netascode/terraform-aci-tenant-span-destination-group/actions/workflows/test.yml)
 
+*This module is no longer maintained as it has been integrated into the [nac-aci](https://github.com/netascode/terraform-aci-nac-aci) module.*
+
 # Terraform ACI Tenant SPAN Destination Group Module
 
 Manages ACI Tenant SPAN Destination Group
